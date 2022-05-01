@@ -2,7 +2,6 @@ package com.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 // Wrapper class for type CipherStatsMap for easy Jackson serialization/deserialization dropwizard.io provides

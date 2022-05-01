@@ -1,5 +1,6 @@
 package com;
 
+
 import com.api.StreamDataStats;
 import com.api.SymmetricCryptoImpl;
 import com.resources.Decrypt;
@@ -8,9 +9,6 @@ import com.resources.PushRecalculateAndEncrypt;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-
-import javax.ws.rs.WebApplicationException;
-import java.security.GeneralSecurityException;
 
 public class webserviceApplication extends Application<webserviceConfiguration> {
 
@@ -32,12 +30,14 @@ public class webserviceApplication extends Application<webserviceConfiguration> 
     @Override
     public void run(final webserviceConfiguration configuration,
                     final Environment env) {
+
+        String cipherMode = configuration.getCipherMode();
+
         // Initializing SymmetricCrypto instance (
         // One AES key will be generated and used for all encryption/decryption operations
         // TODO: Expand this to per user/role key generation and key lifecycle management if needed be
         // TODO: Secure key storage or redesign using/leveraging KMS for key management
-        SymmetricCryptoImpl symmetricEnc;
-        symmetricEnc = new SymmetricCryptoImpl();
+        SymmetricCryptoImpl symmetricEnc = new SymmetricCryptoImpl(cipherMode);
 
         // Initializing StreamDataStats instance
         // The running total for mean and standard deviations will be reset to 0 on server restart

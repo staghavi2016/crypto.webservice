@@ -1,6 +1,5 @@
 package com.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,7 +7,6 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
-import java.util.Base64;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.validation.constraints.NotEmpty;
@@ -21,9 +19,12 @@ public class CryptoSVCImpl {
     //Supporting various key sizes for algorithms that support variety of key sizes in future
     private int keySize;
 
-    //Supporting various symmetric algorithms that a given crypto provider library supports JCA for instance supports
+    //Supporting various symmetric algorithms that a given crypto provider library supports JCE for instance supports
     // E.g., AES (128), DES (56), DESede (168) etc.
     private String cryptoAlgo;
+
+    // Supporting various modes of given algorithm (e.g., AES/CBC/PKCS5Padding) Configurable through config.yml
+    private String cipherMode;
 
     // Base64 version of the AES key used for encryption
     @NotEmpty
@@ -32,7 +33,8 @@ public class CryptoSVCImpl {
     /* TODO To enable usage of various number of keys per role or user with TTL or better to enable KMS integration
         and fetch keys per role or token for enc/decryption
     */
-    private CryptoSVCImpl(Integer size, String algo) throws NoSuchAlgorithmException {
+    private CryptoSVCImpl(String cipherMode, Integer size, String algo) throws NoSuchAlgorithmException {
+        this.cipherMode = cipherMode;
         this.keySize = size != null ? size : 256;
         this.cryptoAlgo = algo != null ? algo : "AES";
         KeyGenerator keyGenerator = KeyGenerator.getInstance(this.cryptoAlgo);
@@ -64,11 +66,11 @@ public class CryptoSVCImpl {
 
     // To be extended to leverage and configure algorithm (e.g., AES, 3DES, etc.) and keysize
     // For now, abiding the requirements of only 1 key for the system
-    public static CryptoSVCImpl getInstance()
+    public static CryptoSVCImpl getInstance(String cipherMode)
     {
         if (singleInstance == null) {
             try {
-                singleInstance = new CryptoSVCImpl(null, null);
+                singleInstance = new CryptoSVCImpl(cipherMode, null, null);
             } catch (NoSuchAlgorithmException e) {
                 LOGGER.error("Error while generating the AES symmetric key singleton object", e);
                 throw new RuntimeException(e);
@@ -89,7 +91,7 @@ public class CryptoSVCImpl {
              ** e.g., CTR modes such as GCM --> AES/GCM/NoPadding  --> referenced here:
              **       https://csrc.nist.gov/projects/block-cipher-techniques/bcm/modes-development
              */
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance(cipherMode);
             cipher.init(Cipher.ENCRYPT_MODE, this.key, ivSpec);
             byte[] encrypted = cipher.doFinal(data);
 
@@ -116,7 +118,7 @@ public class CryptoSVCImpl {
              ** e.g., CTR modes such as GCM --> AES/GCM/NoPadding  --> referenced here:
              **       https://csrc.nist.gov/projects/block-cipher-techniques/bcm/modes-development
              */
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance(cipherMode);
             cipher.init(Cipher.DECRYPT_MODE, this.key, ivSpec);
             byte[] decrypted = cipher.doFinal(encryptedData);
 
@@ -127,12 +129,4 @@ public class CryptoSVCImpl {
             throw new GeneralSecurityException("Error while decrypting the data");
         }
     }
-
 }
-
-
-
-
-
-
-

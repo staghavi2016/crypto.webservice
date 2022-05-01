@@ -2,6 +2,7 @@ package com.resources;
 
 
 import com.api.*;
+import io.dropwizard.jersey.caching.CacheControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +12,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
-import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
+import com.codahale.metrics.annotation.*;
 
 @Path("")
 public class Decrypt {
@@ -33,6 +36,9 @@ public class Decrypt {
     **   OUTPUTS: {"floatNum":8.0}
     */
     @POST
+    @Timed(name= "decrypt-post-requests-timed")
+    @Metered(name= "decrypt-post-requests-metered")
+    @CacheControl(maxAge = 1, maxAgeUnit = TimeUnit.MINUTES)
     @Path("/Decrypt")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,6 +71,9 @@ public class Decrypt {
      **  OUTPUTS: {"mean":8.0,"standardD":1.0}
      */
     @POST
+    @Timed(name= "decryptMap-post-requests-timed")
+    @Metered(name= "decryptMap-post-requests-metered")
+    @CacheControl(maxAge = 1, maxAgeUnit = TimeUnit.MINUTES)
     @Path("/DecryptMap")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)

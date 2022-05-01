@@ -2,7 +2,7 @@ package com.resources;
 
 
 import com.api.*;
-import com.resources.PushAndRecalculate;
+import io.dropwizard.jersey.caching.CacheControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +13,7 @@ import javax.ws.rs.core.MediaType;
 import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.util.Map;
+import com.codahale.metrics.annotation.*;
 
 @Path("")
 public class PushRecalculateAndEncrypt {
@@ -40,10 +41,13 @@ public class PushRecalculateAndEncrypt {
      **              "standardD":{"cipherText":"fyjNtPlmMCQb3Vhkr6z/Hw=="}}'
      */
     @POST
+    @Timed(name= "push-recalculate-and-encrypt-post-requests-timed")
+    @Metered(name= "push-recalculate-and-encrypt-post-requests-metered")
+    @CacheControl(noCache=true)
     @Path("/PushRecalculateAndEncrypt")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public CipherStatsMap pushRecalculateAndEncrypt(@NotNull @Valid IntNumber num) {
+    public CipherStatsMap PushRecalculateAndEncrypt(@NotNull @Valid IntNumber num) {
         Map<String, Float> stats =  stat.getMovingStats(num.getNum());
 
         byte[] meanBytes = ByteBuffer.allocate(4).putFloat(stats.get("mean")).array();

@@ -1,9 +1,7 @@
 package com.api;
 
-import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.NoSuchAlgorithmException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -28,9 +26,9 @@ public class SymmetricCryptoImpl {
      /* Constructor through which we initialize and generate the AES symmetric key and keep it
      ** on RAM for enc/decryption
      */
-    public SymmetricCryptoImpl() {
+    public SymmetricCryptoImpl(String cipherMode) {
         encyptedSize = 0;
-        SymmetricKey = CryptoSVCImpl.getInstance();
+        SymmetricKey = CryptoSVCImpl.getInstance(cipherMode);
     }
 
     public String encrypt(byte[] data) throws GeneralSecurityException {

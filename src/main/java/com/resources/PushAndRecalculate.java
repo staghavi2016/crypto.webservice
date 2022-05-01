@@ -2,14 +2,17 @@ package com.resources;
 
 
 import com.api.*;
+import io.dropwizard.jersey.caching.CacheControl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.nio.ByteBuffer;
-import java.security.GeneralSecurityException;
 import java.util.Map;
+
+import com.codahale.metrics.annotation.*;
 
 
 @Path("")
@@ -20,6 +23,7 @@ public class PushAndRecalculate {
         this.stat = stat;
     }
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PushAndRecalculate.class);
 
      /* Supports calculating streaming (i.e., moving) mean and standard deviation of streaming input single integers.
      ** Input format is: '{"signleNum":SINGLE INTEGER NUMBER}'
@@ -31,6 +35,9 @@ public class PushAndRecalculate {
      **   OUTPUTS: {"mean":8.0,"standardD":1.0}
      */
     @POST
+    @Timed(name= "push-and-recalculate-post-requests-timed")
+    @Metered(name= "push-and-recalculate-post-requests-metered")
+    @CacheControl(noCache=true)
     @Path("/PushAndRecalculate")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
