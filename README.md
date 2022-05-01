@@ -42,6 +42,7 @@ How to start the webservice application
 ```
 10. Application is containerized and Dockerfile is available to run as an alternative way of running the application. Steps are listed below
 ```
+   ### Any changes made to the code requires rebuilding of the Docker (step 1 below) to test the changes
    1- Run docker build command on the cloned repo top directory where Dockerfile is with a tag you want to label the docker with
       docker build -t <INSERT-YOUR-TAG> .
       e.g., docker built -t crypto.webserviceV1.0 
