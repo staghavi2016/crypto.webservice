@@ -40,8 +40,22 @@ How to start the webservice application
 ```
    http://localhost:8081/
 ```
-10. 
+10. Application is containerized and Dockerfile is available to run as an alternative way of running the application. Steps are listed below
+```
+   1- Run docker build command on the cloned repo top directory where Dockerfile is with a tag you want to label the docker with
+      docker build -t <INSERT-YOUR-TAG> .
+      e.g., docker built -t crypto.webserviceV1.0 
+   2- Two options to run the docker are:
+   # Run locally in interactive mode
+   docker run -p 8080:8081 -it crypto.webserviceV1.0
+   # Run in detached mode (you will need to look to docker see the log/stdout stream)
+   docker run -d -p 8080:8081 crypto.webserviceV1.0
 
+   Hint:
+   If you prefer to serve on port 6060 and 6061 on the host machine; however, do not want to take the time to change
+   the default 8080 and 8081 on crypto.webservice, you could use -p 6060-6061:8080-8081
+    
+```
 
 ---
 
@@ -51,9 +65,22 @@ Assumptions & Limitations:
 ---
 1. JCE provider is leveraged for symmetric crypto (AES256) used for this implementation. 
 2. Only 1 key is provisioned to be used for encryption and decryption based on requirements. In order to
-provision it once, leveraged singleton design pattern for CryptoSVCImpl API.
+provision it once, leveraged singleton design pattern for CryptoSVCImpl class instance; hence, one symmetric key will be generated only and used across.
 3. AES/CBC/PKCS5Padding is used for both encryption and decryption; however, any other modes could be configured through config.yml
 4. In order to calculate moving average and standard deviation on streaming data, 
 Welford's online algorithm is implemented. (https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_online_algorithm)
-5. 
+5. Streaming statistics are accumulated and calculated towards one shared value for both moving average and moving standard deviation.
+6. Streaming (moving) statistics are reset on application restart.
+7. As per requirements, there is no client authentication nor server side TLS/SSL.
+8. Base64 encoding is used for encoding and decoding encrypted data 
+9. Accumulating moving statistics is designed to be ThreadSafe 
+
+Future Enhancements
+---
+    More logging and custom meaningful logs
+    Custom error handling for various http error types
+    More on input validation
+    Comparing other crypto libraries (e.g, Bouncy Castle) and leveraging possibly stronger one
+    Containerization of the application natively through Maven
+    
 

@@ -47,7 +47,7 @@ public class PushRecalculateAndEncrypt {
     @Path("/PushRecalculateAndEncrypt")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public CipherStatsMap PushRecalculateAndEncrypt(@NotNull @Valid IntNumber num) {
+    public CipherStatsMap PushRecalculateAndEncrypt(@NotNull @Valid() IntNumber num) {
         Map<String, Float> stats =  stat.getMovingStats(num.getNum());
 
         byte[] meanBytes = ByteBuffer.allocate(4).putFloat(stats.get("mean")).array();
