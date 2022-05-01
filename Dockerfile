@@ -1,6 +1,6 @@
 ### Build Stage ###
 
-FROM maven:3.6.0-jdk-11-slim AS build
+FROM maven:3.8.5-openjdk-18 AS build
 
 COPY pom.xml /tmp/pom.xml
 RUN mvn -B -f /tmp/pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:resolve
