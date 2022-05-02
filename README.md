@@ -130,6 +130,7 @@ Future Enhancements
     More logging and custom meaningful logs
     Custom error handling for various http error types
     More on input validation as Dropwizard validation annotatioons seem to have some deficiencies
+    Adding more comprehensive unit testing, component testing and integration testing
     Comparing other crypto libraries (e.g, Bouncy Castle) and integrating a stronger one
     Containerization of the application natively through Maven
     Adding healthcheck probes for the application
