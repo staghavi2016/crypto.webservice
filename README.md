@@ -3,7 +3,7 @@
 How to start the webservice application
 ---
 1. Install JDK (tested on openjdk version "18.0.1" 2022-04-19) and maven (Apache Maven 3.8.5)
-2. Set $JAVA_HHOME
+2. Set $JAVA_HOME
 ```
    export JAVA_HOME=<Path to JDK folder>/openjdk/18.0.1  
 ```
@@ -14,11 +14,34 @@ How to start the webservice application
 ```
 4. Run `mvn clean install` to build your application
 5. Start application with `$JAVA_HOME/bin/java -jar $HOME/<PATH TO CLONED REPO>/target/crypto.webservice-1.0-SNAPSHOT.jar server config.yml`
-6. To check that your application is running enter url `http://localhost:8080`
-7. Run UnitTests
+
+Dockerized version 
+---
+6. Alternatively, build and run the dockerized version of the webservice following the steps below:
+```
+   ### Any changes made to the code requires rebuilding of the Docker (step 1 below) to test the changes
+   1- Run docker build command on the cloned repo top directory where Dockerfile is with a tag you want to label the docker with
+      docker build -t <INSERT-YOUR-TAG> .
+      e.g., docker built -t crypto.webserviceV1.0 
+   2- Two options to run the docker are:
+   # Run locally in interactive mode
+   docker run -p 8080:8081 -it crypto.webserviceV1.0
+   # Run in detached mode (you will need to look to docker see the log/stdout stream)
+   docker run -d -p 8080:8081 crypto.webserviceV1.0
+
+   Hint:
+   If you prefer to serve on port 6060 and 6061 on the host machine; however, do not want to take the time to change
+   the default 8080 and 8081 on crypto.webservice, you could use -p 6060-6061:8080-8081
+    
+```
+
+7. To check that your application is running enter url `http://localhost:8080`
+
+8. In order to specifically run the unit tests, run:
 ```
    mvn test
 ```
+you will see similar output on successful execution of current tests
 ```
 [INFO] Results:
 [INFO] 
@@ -40,27 +63,10 @@ How to start the webservice application
 ```
    http://localhost:8081/
 ```
-10. Application is containerized and Dockerfile is available to run as an alternative way of running the application. Steps are listed below
-```
-   ### Any changes made to the code requires rebuilding of the Docker (step 1 below) to test the changes
-   1- Run docker build command on the cloned repo top directory where Dockerfile is with a tag you want to label the docker with
-      docker build -t <INSERT-YOUR-TAG> .
-      e.g., docker built -t crypto.webserviceV1.0 
-   2- Two options to run the docker are:
-   # Run locally in interactive mode
-   docker run -p 8080:8081 -it crypto.webserviceV1.0
-   # Run in detached mode (you will need to look to docker see the log/stdout stream)
-   docker run -d -p 8080:8081 crypto.webserviceV1.0
-
-   Hint:
-   If you prefer to serve on port 6060 and 6061 on the host machine; however, do not want to take the time to change
-   the default 8080 and 8081 on crypto.webservice, you could use -p 6060-6061:8080-8081
-    
-```
-
+10. To see your healthcheck of the application enter url `http://localhost:8081/healthcheck`
 ---
 
-To see your applications health enter url `http://localhost:8081/healthcheck`
+
 
 Assumptions & Limitations:
 ---
@@ -74,14 +80,17 @@ Welford's online algorithm is implemented. (https://en.wikipedia.org/wiki/Algori
 6. Streaming (moving) statistics are reset on application restart.
 7. As per requirements, there is no client authentication nor server side TLS/SSL.
 8. Base64 encoding is used for encoding and decoding encrypted data 
-9. Accumulating moving statistics is designed to be ThreadSafe 
+9. Accumulating moving statistics is designed to be ThreadSafe
+10. Dropwizard framework and many of its features are leveraged to build this application. Here is the refrence: 
+https://www.dropwizard.io/en/latest/getting-started.html 
 
 Future Enhancements
 ---
     More logging and custom meaningful logs
     Custom error handling for various http error types
-    More on input validation
-    Comparing other crypto libraries (e.g, Bouncy Castle) and leveraging possibly stronger one
+    More on input validation as Dropwizard validation annotatioons seem to have some deficiencies
+    Comparing other crypto libraries (e.g, Bouncy Castle) and integrating a stronger one
     Containerization of the application natively through Maven
+    Adding healthcheck probes for the application
     
 
