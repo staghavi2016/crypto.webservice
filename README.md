@@ -133,5 +133,6 @@ Future Enhancements
     Comparing other crypto libraries (e.g, Bouncy Castle) and integrating a stronger one
     Containerization of the application natively through Maven
     Adding healthcheck probes for the application
+    More configurable options through config.yml
     
 
