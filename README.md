@@ -39,7 +39,7 @@ A webservice that supports 4 APIs described below and calculates a streaming/mov
 ```
    Sample returned JSON:
 ```
-   {"mean":8.0,"standardD":1.0}
+   '{"mean":8.0,"standardD":1.0}'
 ```
 How to start the webservice application
 ---
