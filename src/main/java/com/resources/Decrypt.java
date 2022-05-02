@@ -59,7 +59,7 @@ public class Decrypt {
         return new FloatNumber(stat);
     }
 
-     /* Supports decrypting a Map<String, float> of both mean and standard deviation
+     /* Supports decrypting a hashmap of both mean and standard deviation
      ** Input format is
      ** '{"mean":{"cipherText":"ENCRYPTED MEAN"},"standardD":{"cipherText":"ENCRYPTED STD"}}'
      **

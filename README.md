@@ -1,5 +1,46 @@
 # Not So Useful Webservice
 
+A webservice that supports 3 APIs described below and calculates a streaming/moving average and standard deviation of input numbers
+
+1- PushAndRecalculate: 
+
+```
+   curl -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"singleNum":1}'  http://0.0.0.0:8080/PushAndRecalculate
+   
+```
+   Sample returned JSON:
+```
+   '{"mean":8.0,"standardD":1.0}'      
+```
+
+2- PushRecalculateAndEncrypt: Supports calculating updated moving(rolling) mean and standard deviation plus encrypting both
+
+```
+   curl -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"singleNum":12}'  http://0.0.0.0:8080/PushRecalculateAndEncrypt
+```
+   Sample returned JSON:
+```
+'{"mean":{"cipherText":"0Npo/Y7s7IVxTCOxN2QCgw=="}, "standardD":{"cipherText":"fyjNtPlmMCQb3Vhkr6z/Hw=="}}'
+```
+3- Decrypt: Supports decrypting an encrypted stat (namely mean or standard deviation) (Decrypts the given encrypted stat from previous PushRecalculateAndEncrypt API call)
+
+```
+   curl -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"cipherText":"AhDjGm/TwOar80AcickyZfAICokOwTPwTqbJZA=="}' http://0.0.0.0:8080/Decrypt
+```
+   Sample returned JSON:
+```
+   '{"floatNum":8.0}'
+```
+
+4- DecryptMap: Supports decrypting a hashmap of type both mean and standard deviation from previous PushRecalculateAndEncrypt API call
+
+```
+   curl -H "Accept: application/json" -H "Content-type: application/json" -X POST -d '{"mean":{"cipherText":"Uto0F4rcdIRq3bv7QmXh5xZPA8xtHsWdj7DrEptM1k0="},"standardD":{"cipherText":"bsv5qZy01GSqHnoXodkod+gFayNBCHtYllXUGHjl8FM="}}'  http://0.0.0.0:8080/DecryptMap
+```
+   Sample returned JSON:
+```
+   {"mean":8.0,"standardD":1.0}
+```
 How to start the webservice application
 ---
 1. Install JDK (tested on openjdk version "18.0.1" 2022-04-19) and maven (Apache Maven 3.8.5)

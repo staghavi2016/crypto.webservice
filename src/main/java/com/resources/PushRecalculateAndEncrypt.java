@@ -35,7 +35,7 @@ public class PushRecalculateAndEncrypt {
      **
      ** e.g.,
      **  curl -H "Accept: application/json" -H "Content-type: application/json" -X POST -d
-     **  '{"signleNum":2}'  http://0.0.0.0:8080/PushAndRecalculate
+     **  '{"signleNum":2}'  http://0.0.0.0:8080/PushRecalculateAndEncrypt
      **
      **   OUTPUTS: '{"mean":{"cipherText":"0Npo/Y7s7IVxTCOxN2QCgw=="},
      **              "standardD":{"cipherText":"fyjNtPlmMCQb3Vhkr6z/Hw=="}}'
