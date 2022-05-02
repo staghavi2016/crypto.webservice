@@ -1,6 +1,6 @@
 # Not So Useful Webservice
 
-A webservice that supports 3 APIs described below and calculates a streaming/moving average and standard deviation of input numbers
+A webservice that supports 4 APIs described below and calculates a streaming/moving average and standard deviation of input numbers
 
 1- PushAndRecalculate: 
 
